@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 class TransactionWebClient {
   Future<List<Transaction>> findAll() async {
     final Response response =
-        await client.get(baseUrl);
+        await client.get(Uri.http(baseUrl, 'transactions'));
     final List<dynamic> decodedJson = jsonDecode(response.body);
     return decodedJson
         .map((dynamic json) => Transaction.fromJson(json))
@@ -19,12 +19,13 @@ class TransactionWebClient {
 
     await Future.delayed(Duration(seconds: 2));
 
-    final Response response = await client.post(baseUrl,
-        headers: {
-          'Content-type': 'application/json',
-          'password': password,
-        },
-        body: transactionJson);
+    final Response response =
+        await client.post(Uri.http(baseUrl, 'transactions'),
+            headers: {
+              'Content-type': 'application/json',
+              'password': password,
+            },
+            body: transactionJson);
 
     if (response.statusCode == 200) {
       return Transaction.fromJson(jsonDecode(response.body));
@@ -34,8 +35,8 @@ class TransactionWebClient {
   }
 
   String _getMessage(int statusCode) {
-    if(_statusCodeResponses.containsKey(statusCode)){
-      return _statusCodeResponses[statusCode];
+    if (_statusCodeResponses.containsKey(statusCode)) {
+      return _statusCodeResponses[statusCode]!;
     }
     return 'unknown error';
   }

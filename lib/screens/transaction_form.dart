@@ -78,7 +78,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     child: Text('Transfer'),
                     onPressed: () {
                       final double value =
-                          double.tryParse(_valueController.text);
+                          double.tryParse(_valueController.text)!;
                       final transactionCreated = Transaction(
                         transactionId,
                         value,

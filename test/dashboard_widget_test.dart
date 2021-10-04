@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'matchers.dart';
+import 'mocks.dart';
 
 void main() {
+  final mockContactDao = MockContactDao();
   testWidgets(
     'Should display the main image when the Dashboard is opended',
     (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Dashboard(),
+          home: Dashboard(
+            contactDao: mockContactDao,
+          ),
         ),
       );
 
@@ -25,7 +29,9 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Dashboard(),
+          home: Dashboard(
+            contactDao: mockContactDao,
+          ),
         ),
       );
 
@@ -45,7 +51,9 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Dashboard(),
+          home: Dashboard(
+            contactDao: mockContactDao,
+          ),
         ),
       );
       final transactionFeedFeatureItem = find.byWidgetPredicate(

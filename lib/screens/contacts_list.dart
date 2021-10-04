@@ -1,18 +1,22 @@
+import 'package:flutter/material.dart';
+
 import 'package:bytebank/components/progress.dart';
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contact_form.dart';
 import 'package:bytebank/screens/transaction_form.dart';
-import 'package:flutter/material.dart';
 
 class ContactsList extends StatefulWidget {
+  final ContactDao contactDao;
+  const ContactsList({
+    Key? key,
+    required this.contactDao,
+  }) : super(key: key);
   @override
   _ContactsListState createState() => _ContactsListState();
 }
 
 class _ContactsListState extends State<ContactsList> {
-  final ContactDao _dao = ContactDao();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,19 +24,18 @@ class _ContactsListState extends State<ContactsList> {
         title: Text('Transfer'),
       ),
       body: FutureBuilder<List<Contact>>(
-        initialData: List(),
-        future: _dao.findAll(),
+        initialData: <Contact>[],
+        future: widget.contactDao.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               break;
             case ConnectionState.waiting:
               return Progress();
-              break;
             case ConnectionState.active:
               break;
             case ConnectionState.done:
-              final List<Contact> contacts = snapshot.data;
+              final List<Contact> contacts = snapshot.data!;
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final Contact contact = contacts[index];
@@ -49,7 +52,6 @@ class _ContactsListState extends State<ContactsList> {
                 },
                 itemCount: contacts.length,
               );
-              break;
           }
           return Text('Unknown error');
         },
@@ -78,7 +80,7 @@ class _ContactItem extends StatelessWidget {
 
   _ContactItem(
     this.contact, {
-    @required this.onClick,
+    required this.onClick,
   });
 
   @override
